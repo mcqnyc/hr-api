@@ -24,6 +24,23 @@ components:
           type: "string"
         base_salary:
           type: "integer"
+    Note:
+      type: "object"
+      required:
+        - employee_id
+      properties:
+        employee_id:
+          type: "integer"
+        content:
+          type: "string"
+  parameters:
+    note_id:
+      name: "note_id"
+      description: "ID of the note"
+      in: path
+      required: true
+      schema:
+        type: "integer"
 paths:
   /employees:
     get:
@@ -72,3 +89,43 @@ paths:
       responses:
         "201":
           description: "Successfully created a note"
+  /notes/{note_id}:
+    get:
+      operationId: "notes.read_one"
+      tags:
+        - Notes
+      summary: "Read one note"
+      parameters:
+        - $ref: "#/components/parameters/note_id"
+      responses:
+        "200":
+          description: "Successfully read one note"
+    put:
+      tags:
+        - Notes
+      operationId: "notes.update"
+      summary: "Update a note"
+      parameters:
+        - $ref: "#/components/parameters/note_id"
+      responses:
+        "200":
+          description: "Successfully updated note"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "note"
+              type: "object"
+              properties:
+                content:
+                  type: "string"
+    delete:
+      tags:
+        - Notes
+      operationId: "notes.delete"
+      summary: "Delete a note"
+      parameters:
+        - $ref: "#/components/parameters/note_id"
+      responses:
+        "204":
+          description: "Successfully deleted note"
