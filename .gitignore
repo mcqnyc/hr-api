@@ -1,6 +1,8 @@
 backupJun212023.sql
 migrations
 venv
+__pycache__
+.idea
 *.db
 scratch_1.txt
 emp1*
