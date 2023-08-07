@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RP Flask REST API</title>
+</head>
+<body>
+    <h1>
+        Hello, HR!
+    </h1>
+    <h3>employees = {{ employees }}</h3>
+    {% for employee in employees %}
+    <h2>{{ employee.first_name }} {{ employee.last_name }}</h2>
+    <ul>
+        {% for note in employee.notes %}
+        <li>
+            {{ note.content }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+
+</body>
+</html>

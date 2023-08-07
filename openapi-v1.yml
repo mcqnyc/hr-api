@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: "HR REST API"
+  description: "A HR API for employee details"
+  version: "1.0.0"
+
+servers:
+  - url: "/api/v1"
+
+components:
+  schemas:
+    Employee:
+      type: "object"
+      required:
+        - last_name
+      properties:
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        gender:
+          type: "string"
+        email:
+          type: "string"
+        base_salary:
+          type: "integer"
+paths:
+  /employees:
+    get:
+      operationId: "employees.read_all"
+      tags:
+        - "Employees"
+      summary: "See the list of all employees"
+      responses:
+        "200":
+          description: "Successfully read employees list"

@@ -1,0 +1,9 @@
+backupJun212023.sql
+migrations
+venv
+*.db
+scratch_1.txt
+emp1*
+Untitled.sql
+main.py
+itertools.py
