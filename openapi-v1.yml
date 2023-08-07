@@ -34,3 +34,20 @@ paths:
       responses:
         "200":
           description: "Successfully read employees list"
+    post:
+      operationId: "employees.create_employee"
+      tags:
+        - "Employees"
+      summary: "Create an employee"
+      requestBody:
+        description: "Employee to create"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "employee"
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "201":
+          description: "Successfully created employee"
+
