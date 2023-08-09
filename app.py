@@ -8,9 +8,7 @@ app.add_api(config.basedir / "openapi-v1.yml")
 
 @app.route("/")
 def home():
-    print('home fires')
     employees = Employee.query.all()
-    print(employees)
     return render_template("home.html", employees=employees)
 
 
