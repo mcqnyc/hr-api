@@ -1,7 +1,7 @@
 from flask import abort, jsonify, request
 
 from config import db
-from models import Employee, employees_schema, employee_schema
+from models import Employee, EmployeeSchema, employees_schema, employee_schema
 
 
 def read_all():
@@ -26,34 +26,44 @@ def create_employee(employee):
 
 
 def search_employees(search_term=None):
-    # try:
-    #     if search_term is None:
-    #         employee = Employee.query.filter().all()
-    #         employee_schema = EmployeeSchema(many=True)
-    #         return employee_schema.jsonify(employee)
-    #     elif search_term ==
+    print(f'search_term = {search_term}')
 
-    query_params = request.args
-    print(f'params = {query_params}')
-    print(f'request url = {request.url}')
-    
-    query = Employee.query
-    if 'last_name' in query_params:
-        last_name = query_params['last_name']
-        
+    try:
+        # if search_term is None:
+        #     employee = Employee.query.filter().all()
+        #     employee_schema = EmployeeSchema(many=True)
+        #     return employee_schema.jsonify(employee)
+        # elif search_term ==
+
+        query_params = request.args
+        print(f'params = {query_params}')
+        print(f'request url = {request.url}')
+
+        query = Employee.query
+        search_term = ''
+        if 'last_name' in query_params:
+            # last_name = query_params['last_name']
+            search_term = query_params['last_name']
+
+        if 'first_name' in query_params:
+            print('its a frist_name')
+            search_term = query_params['first_name']
+
+        print(f'search_term = {search_term}')
         query = query.filter(db.or_(
             # Employee.first_name.ilike(name),
-            Employee.last_name.ilike(last_name)
+            # Employee.last_name.ilike(last_name)
+            Employee.last_name.ilike(search_term)
         ))
         print(f'query: {query}')
-    # Add other search options like create date, modified date, gender, pay range.
+        # Add other search options like create date, modified date, gender, pay range.
         employees = query.all()
         print(f'employees: {employees}')
         result = []
-        
+
         if len(employees) > 0:
             for employee in employees:
-                print(f'employee: {employee}')
+                print(f'employee: {employee.last_name}')
                 result.append({
                     'id': employee.id,
                     'first_name': employee.first_name,
@@ -69,6 +79,7 @@ def search_employees(search_term=None):
                 404,
                 # f"Employee with name {first_name} does not exist",
                 # f"Employee cannot be found",
-                f"Employee {last_name} cannot be found",
+                f"Employee {search_term} cannot be found",
             )
-        
+    except:
+        print('there was an issue retrieving data from the database')
