@@ -10,8 +10,8 @@ def read_all():
 
 
 def create_employee(employee):
-    last_name = employee.get("last_name")
-    existing_employee = Employee.query.filter(Employee.last_name == last_name).one_or_none()
+    email = employee.get("email")
+    existing_employee = Employee.query.filter(Employee.email == email).one_or_none()
 
     if existing_employee is None:
         new_employee = employee_schema.load(employee, session=db.session)
@@ -21,7 +21,7 @@ def create_employee(employee):
     else:
         abort(
             406,
-            f"Employee with last name {last_name} already exists",
+            f"Employee with same email already exists",
         )
 
 
@@ -41,20 +41,18 @@ def search_employees(search_term=None):
 
         query = Employee.query
         search_term = ''
+
         if 'last_name' in query_params:
-            # last_name = query_params['last_name']
             search_term = query_params['last_name']
+            query = query.filter(db.or_(
+                Employee.last_name.ilike(search_term)
+            ))
 
         if 'first_name' in query_params:
-            print('its a frist_name')
             search_term = query_params['first_name']
-
-        print(f'search_term = {search_term}')
-        query = query.filter(db.or_(
-            # Employee.first_name.ilike(name),
-            # Employee.last_name.ilike(last_name)
-            Employee.last_name.ilike(search_term)
-        ))
+            query = query.filter(db.or_(
+                Employee.first_name.ilike(search_term)
+            ))
         print(f'query: {query}')
         # Add other search options like create date, modified date, gender, pay range.
         employees = query.all()
