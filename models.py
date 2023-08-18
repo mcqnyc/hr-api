@@ -2,13 +2,12 @@ from datetime import datetime
 from marshmallow_sqlalchemy import fields
 
 from config import db, ma
-# Employee, employees_schema, employee_schema
 
 
 class Note(db.Model):
-    __tablename__ = "note"
+    __tablename__ = "Note"
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey("employee.id"))
+    employee_id = db.Column(db.Integer, db.ForeignKey("Employee.id"))
     content = db.Column(db.String, nullable=False)
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
@@ -24,13 +23,12 @@ class NoteSchema(ma.SQLAlchemyAutoSchema):
 
 
 class Employee(db.Model):
-    __tablename__ = "employee"
+    __tablename__ = "Employee"
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     gender = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
-    # base_salary = db.Column(db.Float, nullable=False)
     base_salary = db.Column(db.Integer)
     timestamp = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
