@@ -100,10 +100,20 @@ paths:
             type: string
           description: The email of the employee
         - in: query
-          name: base_salary
+          name: base_salary_eq
           schema:
             type: integer
           description: The salary of the employee
+        - in: query
+          name: base_salary_gte
+          schema:
+            type: integer
+          description: The salary of the employee (greater than or equal to)
+        - in: query
+          name: base_salary_lte
+          schema:
+            type: integer
+          description: The salary of the employee (less than or equal to)
   /notes:
     post:
       operationId: "notes.create"
