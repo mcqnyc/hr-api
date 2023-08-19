@@ -25,13 +25,16 @@ class NoteSchema(ma.SQLAlchemyAutoSchema):
 class Employee(db.Model):
     __tablename__ = "Employee"
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(64), nullable=False)
-    last_name = db.Column(db.String(64), nullable=False)
-    gender = db.Column(db.String(64), nullable=False)
+    first_name = db.Column(db.String(64), nullable=True)
+    last_name = db.Column(db.String(64), nullable=True)
+    gender = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(64), nullable=False)
     base_salary = db.Column(db.Integer)
-    timestamp = db.Column(
-        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    created = db.Column(
+        db.DateTime, default=datetime.utcnow
+    )
+    updated = db.Column(
+        db.DateTime, onupdate=datetime.utcnow
     )
     notes = db.relationship(
         Note,

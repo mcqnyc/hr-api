@@ -12,8 +12,10 @@ components:
     Employee:
       type: "object"
       required:
-        - last_name
+        - email
       properties:
+        id:
+          type: "integer"
         first_name:
           type: "string"
         last_name:
@@ -67,6 +69,38 @@ paths:
       responses:
         "201":
           description: "Successfully created employee"
+    put:
+      operationId: "employees.update_employee"
+      tags:
+        - "Employees"
+      summary: "Update an employee"
+      requestBody:
+        description: "Employee to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "employee"
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "200":
+          description: "Successfully updated employee"
+    patch:
+      operationId: "employees.patch_employee"
+      tags:
+        - "Employees"
+      summary: "Update an employee"
+      requestBody:
+        description: "Employee to update"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "employee"
+              $ref: "#/components/schemas/Employee"
+      responses:
+        "200":
+          description: "Successfully updated employee"
   /employees/search:
     get:
       operationId: "employees.search_employees"

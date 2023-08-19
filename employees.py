@@ -97,3 +97,37 @@ def search_employees(search_term=None):
             )
     except:
         print('there was an issue retrieving data from the database')
+
+
+def update_employee(employee):
+    employee_id = employee.get("id")
+    existing_employee = Employee.query.filter(Employee.id == employee_id).one_or_none()
+
+    if existing_employee is None:
+        abort(
+            406,
+            f"Employee record does not exist so it cannot be updated",
+        )
+    else:
+        updated_employee = employee_schema.load(employee, session=db.session)
+        updated_employee.id = existing_employee.id
+        db.session.add(updated_employee)
+        db.session.commit()
+        return employee_schema.dump(updated_employee), 200
+
+
+def patch_employee(employee):
+    employee_id = employee.get("id")
+    existing_employee = Employee.query.filter(Employee.id == employee_id).one_or_none()
+
+    if existing_employee is None:
+        abort(
+            406,
+            f"Employee record does not exist so it cannot be updated",
+        )
+    else:
+        updated_employee = employee_schema.load(employee, session=db.session)
+        updated_employee.id = existing_employee.id
+        db.session.add(updated_employee)
+        db.session.commit()
+        return employee_schema.dump(updated_employee), 200
