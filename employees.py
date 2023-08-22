@@ -28,8 +28,8 @@ def create_employee(employee):
 def search_employees(search_term=None):
 
     try:
-        if search_term is None:
-            return read_all()
+        # if search_term is None:
+        #     return read_all()
 
         query_params = request.args
         print(f'params = {query_params}')
@@ -38,16 +38,28 @@ def search_employees(search_term=None):
         query = Employee.query
         search_term = ''
 
+        if 'first_name' in query_params:
+            search_term = query_params['first_name']
+            query = query.filter(db.or_(
+                Employee.first_name.ilike(search_term)
+            ))
+
+        if 'like_first_name' in query_params:
+            search_term = query_params['like_first_name']
+            query = query.filter(db.or_(
+                Employee.first_name.ilike('%' + search_term + '%')
+            ))
+
         if 'last_name' in query_params:
             search_term = query_params['last_name']
             query = query.filter(db.or_(
                 Employee.last_name.ilike(search_term)
             ))
 
-        if 'first_name' in query_params:
-            search_term = query_params['first_name']
+        if 'like_last_name' in query_params:
+            search_term = query_params['like_last_name']
             query = query.filter(db.or_(
-                Employee.first_name.ilike(search_term)
+                Employee.last_name.ilike('%' + search_term + '%')
             ))
 
         if 'gender' in query_params:

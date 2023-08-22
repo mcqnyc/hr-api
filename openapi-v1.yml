@@ -110,7 +110,7 @@ paths:
       responses:
         "200":
           description: "Successfully found employee"
-        "404":
+        "204":
           description: "Cannot find employee"
       parameters:
         - in: query
@@ -119,10 +119,20 @@ paths:
             type: string
           description: The first name of the employee
         - in: query
+          name: like_first_name
+          schema:
+            type: string
+          description: Wildcard search the first name of the employee
+        - in: query
           name: last_name
           schema:
             type: string
           description: The last name of the employee
+        - in: query
+          name: like_last_name
+          schema:
+            type: string
+          description: Wildcard search the last name of the employee
         - in: query
           name: gender
           schema:
