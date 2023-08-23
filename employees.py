@@ -25,18 +25,23 @@ def create_employee(employee):
         )
 
 
-def search_employees(search_term=None):
-
+def search_employees():
+    search_term = ''
     try:
-        if search_term is None:
-            return read_all()
-
         query_params = request.args
-        print(f'params = {query_params}')
-        print(f'request url = {request.url}')
-
         query = Employee.query
-        search_term = ''
+
+        if 'first_name' in query_params:
+            search_term = query_params['first_name']
+            query = query.filter(db.or_(
+                Employee.first_name.ilike(search_term)
+            ))
+
+        if 'like_first_name' in query_params:
+            search_term = query_params['like_first_name']
+            query = query.filter(db.or_(
+                Employee.first_name.ilike('%' + search_term + '%')
+            ))
 
         if 'last_name' in query_params:
             search_term = query_params['last_name']
@@ -44,10 +49,10 @@ def search_employees(search_term=None):
                 Employee.last_name.ilike(search_term)
             ))
 
-        if 'first_name' in query_params:
-            search_term = query_params['first_name']
+        if 'like_last_name' in query_params:
+            search_term = query_params['like_last_name']
             query = query.filter(db.or_(
-                Employee.first_name.ilike(search_term)
+                Employee.last_name.ilike('%' + search_term + '%')
             ))
 
         if 'gender' in query_params:
@@ -74,9 +79,7 @@ def search_employees(search_term=None):
                 Employee.base_salary <= search_term
             ))
 
-        print(f'query: {query}')
         employees = query.all()
-        print(f'employees: {employees}')
         result = []
 
         if len(employees) > 0:
@@ -90,30 +93,28 @@ def search_employees(search_term=None):
                     'base_salary': employee.base_salary
                 })
             return jsonify(result)
-        else:
-            abort(
-                404,
-                f"{search_term} cannot be found",
-            )
-    except:
-        print('there was an issue retrieving data from the database')
+    except Exception as e:
+        print(f'there was an error searching for employee data using the search term: {search_term}: {e}')
 
 
 def update_employee(employee):
     employee_id = employee.get("id")
-    existing_employee = Employee.query.filter(Employee.id == employee_id).one_or_none()
+    try:
+        existing_employee = Employee.query.filter(Employee.id == employee_id).one_or_none()
 
-    if existing_employee is None:
-        abort(
-            406,
-            f"Employee record does not exist so it cannot be updated",
-        )
-    else:
-        updated_employee = employee_schema.load(employee, session=db.session)
-        updated_employee.id = existing_employee.id
-        db.session.add(updated_employee)
-        db.session.commit()
-        return employee_schema.dump(updated_employee), 200
+        if existing_employee is None:
+            abort(
+                406,
+                f"Employee record does not exist so it cannot be updated",
+            )
+        else:
+            updated_employee = employee_schema.load(employee, session=db.session)
+            updated_employee.id = existing_employee.id
+            db.session.add(updated_employee)
+            db.session.commit()
+            return employee_schema.dump(updated_employee), 200
+    except Exception as e:
+        print(f'there was an error updating employee data for employee: {employee_id}: {e}')
 
 
 def patch_employee(employee):
