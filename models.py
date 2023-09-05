@@ -24,24 +24,20 @@ class NoteSchema(ma.SQLAlchemyAutoSchema):
 
 class Employee(db.Model):
     __tablename__ = "Employee"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(64), nullable=True)
     last_name = db.Column(db.String(64), nullable=True)
     gender = db.Column(db.String(64), nullable=True)
     email = db.Column(db.String(64), nullable=False)
     base_salary = db.Column(db.Integer)
-    created = db.Column(
-        db.DateTime, default=datetime.utcnow
-    )
-    updated = db.Column(
-        db.DateTime, onupdate=datetime.utcnow
-    )
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    updated = db.Column(db.DateTime, onupdate=datetime.utcnow)
     notes = db.relationship(
         Note,
         backref="employee",
         cascade="all, delete, delete-orphan",
         single_parent=True,
-        order_by="desc(Note.timestamp)"
+        order_by="desc(Note.timestamp)",
     )
 
 
@@ -51,6 +47,7 @@ class EmployeeSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
         sqla_session = db.session
         include_relationships = True
+
     notes = fields.Nested(NoteSchema, many=True)
 
 
