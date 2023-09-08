@@ -1,23 +1,9 @@
 import os
-import requests
-from flask import abort, jsonify, request
+from flask import abort, jsonify, request, current_app
 
 from config import db
 from models import Employee, EmployeeSchema, employees_schema, employee_schema
-
-
-def send_simple_message(to, subject, body):
-    domain = os.getenv("MAILGUN_DOMAIN")
-    return requests.post(
-        f"https://api.mailgun.net/v3/{domain}/messages",
-        auth=("api", os.getenv("MAILGUN_API_KEY")),
-        data={
-            "from": f"MCQ <mailgun@{domain}>",
-            "to": [to],
-            "subject": [subject],
-            "text": [body],
-        },
-    )
+from tasks import send_employee_added_email
 
 
 def read_all():
@@ -34,13 +20,12 @@ def create_employee(employee):
         db.session.add(new_employee)
         db.session.commit()
 
+        admin_email = os.getenv("ADMIN_EMAIL")
         first_name = employee.get("first_name")
         last_name = employee.get("last_name")
 
-        send_simple_message(
-            to=os.getenv("ADMIN_EMAIL"),
-            subject=f"An employee was successfully added to the HR REST API.",
-            body=f"Employee added: {first_name} {last_name}",
+        current_app.queue.enqueue(
+            send_employee_added_email, admin_email, first_name, last_name
         )
 
         return employee_schema.dump(new_employee), 201
