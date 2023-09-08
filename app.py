@@ -1,5 +1,7 @@
-from flask import render_template
 import config
+
+from flask import render_template
+
 from models import Employee
 
 app = config.connex_app

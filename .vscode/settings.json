@@ -1,13 +1,13 @@
 {
   "workbench.colorCustomizations": {
     "commandCenter.border": "#e7e7e799",
-    "sash.hoverBorder": "#737af2",
-    "titleBar.activeBackground": "#444eee",
+    "sash.hoverBorder": "#465d75",
+    "titleBar.activeBackground": "#334455",
     "titleBar.activeForeground": "#e7e7e7",
-    "titleBar.inactiveBackground": "#444eee99",
+    "titleBar.inactiveBackground": "#33445599",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#444eee",
+  "peacock.color": "#334455",
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
